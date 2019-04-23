@@ -1,0 +1,107 @@
+==12444== Memcheck, a memory error detector
+==12444== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==12444== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==12444== Command: ../build/aarch64/bin/fcrn-camera --fp16
+==12444== 
+==12444== Warning: set address range perms: large range [0xc137000, 0x2074c000) (defined)
+Create plugin creator
+get plugin name
+get plugin name
+get plugin version
+==12444== Warning: set address range perms: large range [0x206000000, 0x3f1440000) (noaccess)
+==12444== Warning: set address range perms: large range [0x10094f0000, 0x11f4930000) (noaccess)
+==12444== Warning: set address range perms: large range [0x2dfff000, 0x4dffe000) (noaccess)
+==12444== Syscall param ioctl(generic) points to uninitialised byte(s)
+==12444==    at 0x25626B1C: ioctl (ioctl.S:26)
+==12444==    by 0x2641D753: ??? (in /usr/lib/aarch64-linux-gnu/tegra/libnvrm_gpu.so)
+==12444==    by 0x2641838B: ??? (in /usr/lib/aarch64-linux-gnu/tegra/libnvrm_gpu.so)
+==12444==    by 0x282A2017: ??? (in /usr/lib/aarch64-linux-gnu/tegra/libcuda.so.1.1)
+==12444==    by 0x28194633: ??? (in /usr/lib/aarch64-linux-gnu/tegra/libcuda.so.1.1)
+==12444==    by 0x281FA297: cuDeviceGetAttribute (in /usr/lib/aarch64-linux-gnu/tegra/libcuda.so.1.1)
+==12444==    by 0x256D5DBB: ??? (in /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcudart.so.10.0.166)
+==12444==  Address 0x1ffefff4bc is on thread 1's stack
+==12444== 
+get plugin version
+deserialize plugin using the creator
+Init 0x43050d80 from data and length
+Readed input width 20
+get plugin version
+deserialize plugin using the creator
+Init 0x441bf330 from data and length
+Readed input width 40
+get plugin version
+deserialize plugin using the creator
+Init 0x441f2c50 from data and length
+Readed input width 80
+get plugin version
+deserialize plugin using the creator
+Init 0x441fe3a0 from data and length
+Readed input width 160
+Initialize plugin 0x43050d80
+Initialize plugin 0x441bf330
+Initialize plugin 0x441f2c50
+Initialize plugin 0x441fe3a0
+==12444== Warning: noted but unhandled ioctl 0x4e04 with no size/direction hints.
+==12444==    This could cause spurious value errors to appear.
+==12444==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+fp16: 0
+==12444== Syscall param read(buf) points to unaddressable byte(s)
+==12444==    at 0x48D0A4C: read (read.c:27)
+==12444==    by 0x25457F03: std::__basic_file<char>::xsgetn(char*, long) (in /usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.25)
+==12444==    by 0x254961DF: std::basic_filebuf<char, std::char_traits<char> >::xsgetn(char*, long) (in /usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.25)
+==12444==    by 0x254A2743: std::istream::read(char*, long) (in /usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.25)
+==12444==    by 0x1248A7: void samplesCommon::readPPMFile<3, 240, 320>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, samplesCommon::PPM<3, 240, 320>&) (in /home/kmouraviev/fcrn-inference/build/aarch64/bin/fcrn-camera)
+==12444==    by 0x1210D3: processImage(char const*, char const*, nvinfer1::IExecutionContext*, bool) (in /home/kmouraviev/fcrn-inference/build/aarch64/bin/fcrn-camera)
+==12444==    by 0x121BC3: main (in /home/kmouraviev/fcrn-inference/build/aarch64/bin/fcrn-camera)
+==12444==  Address 0x1fff001000 is not stack'd, malloc'd or (recently) free'd
+==12444== 
+PPM image readed
+Data created
+Data size: 230400
+First data pixel: 0.333333
+engine has 2 bindings
+Input index: 0
+Output index: 1
+Input buffer size: 230400
+Output buffer size: 76800
+enquque plugin 0x43050d80
+Input size: 512 15 20
+==12444== Conditional jump or move depends on uninitialised value(s)
+==12444==    at 0x208AA378: cublasSetStream_v2 (in /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcublas.so.10.0.166)
+==12444== 
+==12444== Use of uninitialised value of size 8
+==12444==    at 0x208AA37C: cublasSetStream_v2 (in /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcublas.so.10.0.166)
+==12444== 
+==12444== Invalid read of size 4
+==12444==    at 0x208AA37C: cublasSetStream_v2 (in /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcublas.so.10.0.166)
+==12444==  Address 0x1000089e6 is not stack'd, malloc'd or (recently) free'd
+==12444== 
+==12444== 
+==12444== Process terminating with default action of signal 11 (SIGSEGV)
+==12444==  Access not within mapped region at address 0x1000089E6
+==12444==    at 0x208AA37C: cublasSetStream_v2 (in /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcublas.so.10.0.166)
+==12444==  If you believe this happened as a result of a stack
+==12444==  overflow in your program's main thread (unlikely but
+==12444==  possible), you can try to increase the size of the
+==12444==  main thread stack using the --main-stacksize= flag.
+==12444==  The main thread stack size used in this run was 8388608.
+==12444== 
+==12444== HEAP SUMMARY:
+==12444==     in use at exit: 746,168,661 bytes in 654,931 blocks
+==12444==   total heap usage: 1,012,858 allocs, 357,927 frees, 1,122,775,938 bytes allocated
+==12444== 
+==12444== LEAK SUMMARY:
+==12444==    definitely lost: 8,288 bytes in 3 blocks
+==12444==    indirectly lost: 0 bytes in 0 blocks
+==12444==      possibly lost: 69,457,428 bytes in 17,590 blocks
+==12444==    still reachable: 676,702,945 bytes in 637,338 blocks
+==12444==                       of which reachable via heuristic:
+==12444==                         stdstring          : 101,051 bytes in 1,486 blocks
+==12444==         suppressed: 0 bytes in 0 blocks
+==12444== Rerun with --leak-check=full to see details of leaked memory
+==12444== 
+==12444== For counts of detected and suppressed errors, rerun with: -v
+==12444== Use --track-origins=yes to see where uninitialised values come from
+==12444== ERROR SUMMARY: 23 errors from 5 contexts (suppressed: 0 from 0)
+Segmentation fault (core dumped)
+

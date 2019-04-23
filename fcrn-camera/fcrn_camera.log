@@ -1,0 +1,352 @@
+[gstreamer] initialized gstreamer, version 1.8.3.0
+Got width 320 and height 240
+[gstreamer] gstCamera attempting to initialize with GST_SOURCE_NVCAMERA
+[gstreamer] gstCamera pipeline string:
+nvcamerasrc ! video/x-raw(memory:NVMM), width=(int)320, height=(int)240, format=(string)NV12, framerate=120/1 ! nvvidconv flip-method=0 ! video/x-raw ! appsink name=mysink
+[gstreamer] gstCamera successfully initialized with GST_SOURCE_NVCAMERA
+
+segnet-camera:  successfully initialized video device
+    width:  320
+   height:  240
+    depth:  12
+Glob Size is 60442514 bytes.
+Added linear block of size 55655424
+Added linear block of size 10046720
+Added linear block of size 9830400
+Added linear block of size 614400
+Deserialize required 3022705 microseconds.
+-  Input binding index: 0
+- Number of dimensions: 3
+- c: 3 h: 240 w: 320
+[cuda]  cudaAllocMapped 921600 bytes, CPU 0x101540000 GPU 0x101540000
+- Output binding index: 1
+- Number of dimensions: 3
+- c: 240 h: 320 w: 1
+[cuda]  cudaAllocMapped 307200 bytes, CPU 0x101621000 GPU 0x101621000
+[cuda]  cudaAllocMapped 921600 bytes, CPU 0x101740000 GPU 0x101740000
+[cuda]  cudaAllocMapped 230400 bytes, CPU 0x101940000 GPU 0x101940000
+[gstreamer] gstreamer transitioning pipeline to GST_STATE_PLAYING
+
+Available Sensor modes : 
+2592 x 1944 FR=30.000000 CF=0x1109208a10 SensorModeType=4 CSIPixelBitDepth=10 DynPixelBitDepth=10
+2592 x 1458 FR=30.000000 CF=0x1109208a10 SensorModeType=4 CSIPixelBitDepth=10 DynPixelBitDepth=10
+1280 x 720 FR=120.000000 CF=0x1109208a10 SensorModeType=4 CSIPixelBitDepth=10 DynPixelBitDepth=10
+[gstreamer] gstreamer changed state from NULL to READY ==> mysink
+[gstreamer] gstreamer changed state from NULL to READY ==> capsfilter1
+[gstreamer] gstreamer changed state from NULL to READY ==> nvvconv0
+[gstreamer] gstreamer changed state from NULL to READY ==> capsfilter0
+[gstreamer] gstreamer changed state from NULL to READY ==> nvcamerasrc0
+[gstreamer] gstreamer changed state from NULL to READY ==> pipeline0
+[gstreamer] gstreamer changed state from READY to PAUSED ==> capsfilter1
+[gstreamer] gstreamer changed state from READY to PAUSED ==> nvvconv0
+[gstreamer] gstreamer changed state from READY to PAUSED ==> capsfilter0
+[gstreamer] gstreamer stream status CREATE ==> src
+[gstreamer] gstreamer changed state from READY to PAUSED ==> nvcamerasrc0
+[gstreamer] gstreamer changed state from READY to PAUSED ==> pipeline0
+[gstreamer] gstreamer msg new-clock ==> pipeline0
+[gstreamer] gstreamer changed state from PAUSED to PLAYING ==> capsfilter1
+[gstreamer] gstreamer changed state from PAUSED to PLAYING ==> nvvconv0
+[gstreamer] gstreamer changed state from PAUSED to PLAYING ==> capsfilter0
+[gstreamer] gstreamer changed state from PAUSED to PLAYING ==> nvcamerasrc0
+
+NvCameraSrc: Trying To Set Default Camera Resolution. Selected sensorModeIndex = 2 WxH = 1280x720 FrameRate = 120.000000 ...
+
+[gstreamer] gstreamer stream status ENTER ==> src
+[gstreamer] gstreamer msg stream-start ==> pipeline0
+Camera is open for streaming
+default X screen 0:   1280 x 1024
+[gstreamer] gstCamera onPreroll
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101978400 GPU 0x101978400
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101994600 GPU 0x101994600
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x1019b0800 GPU 0x1019b0800
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x1019cca00 GPU 0x1019cca00
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x1019e8c00 GPU 0x1019e8c00
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101a04e00 GPU 0x101a04e00
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101a21000 GPU 0x101a21000
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101a3d200 GPU 0x101a3d200
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101a59400 GPU 0x101a59400
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101a75600 GPU 0x101a75600
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101a91800 GPU 0x101a91800
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101aada00 GPU 0x101aada00
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101ac9c00 GPU 0x101ac9c00
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101ae5e00 GPU 0x101ae5e00
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101b02000 GPU 0x101b02000
+[cuda]  cudaAllocMapped 115200 bytes, CPU 0x101b1e200 GPU 0x101b1e200
+[cuda]   gstreamer camera -- allocated 16 ringbuffers, 115200 bytes each
+[gstreamer] gstreamer changed state from READY to PAUSED ==> mysink
+[gstreamer] gstreamer msg async-done ==> pipeline0
+[gstreamer] gstreamer changed state from PAUSED to PLAYING ==> mysink
+[gstreamer] gstreamer changed state from PAUSED to PLAYING ==> pipeline0
+[OpenGL]  glDisplay display window initialized
+[OpenGL]   creating 320x240 texture
+[OpenGL]   creating 320x240 texture
+[cuda]  cudaAllocMapped 230400 bytes, CPU 0x101b40000 GPU 0x101b40000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x101d40000 GPU 0x101d40000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x101f40000 GPU 0x101f40000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102140000 GPU 0x102140000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102340000 GPU 0x102340000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102540000 GPU 0x102540000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102740000 GPU 0x102740000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102940000 GPU 0x102940000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102b40000 GPU 0x102b40000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102d40000 GPU 0x102d40000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x102f40000 GPU 0x102f40000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x103140000 GPU 0x103140000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x103340000 GPU 0x103340000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x103540000 GPU 0x103540000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x103740000 GPU 0x103740000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x103940000 GPU 0x103940000
+[cuda]  cudaAllocMapped 1228800 bytes, CPU 0x103b40000 GPU 0x103b40000
+[cuda]   gstreamer camera -- allocated 16 RGBA ringbuffers
+Time to process single frame: 0.170292
+Time to capture: 0.00356085
+Time to preprocess: 0.0243036
+Time to run engine: 0.142428
+[cuda]   registered 230400 byte openGL texture for interop access (320x240)
+[cuda]   registered 230400 byte openGL texture for interop access (320x240)
+Time to postprocess and render: 0.0267902
+
+Time to process single frame: 0.106909
+Time to capture: 0.00575022
+Time to preprocess: 0.00017232
+Time to run engine: 0.100987
+Time to postprocess and render: 0.00895792
+
+Time to process single frame: 0.104065
+Time to capture: 0.00754849
+Time to preprocess: 0.000286943
+Time to run engine: 0.0962296
+Time to postprocess and render: 0.0123706
+
+Time to process single frame: 0.0919988
+Time to capture: 0.00166204
+Time to preprocess: 0.000198464
+Time to run engine: 0.0901383
+Time to postprocess and render: 0.00787885
+
+Time to process single frame: 0.0905191
+Time to capture: 0.00598363
+Time to preprocess: 0.000120031
+Time to run engine: 0.0844155
+Time to postprocess and render: 0.00948272
+
+Time to process single frame: 0.0884859
+Time to capture: 0.00693972
+Time to preprocess: 0.000470078
+Time to run engine: 0.0810761
+Time to postprocess and render: 0.0114357
+
+Time to process single frame: 0.0891225
+Time to capture: 0.0074993
+Time to preprocess: 0.000282847
+Time to run engine: 0.0813404
+Time to postprocess and render: 0.0107956
+
+Time to process single frame: 0.0897834
+Time to capture: 0.00840096
+Time to preprocess: 0.000192287
+Time to run engine: 0.0811902
+Time to postprocess and render: 0.0103156
+
+Time to process single frame: 0.0871869
+Time to capture: 0.00510894
+Time to preprocess: 0.000251839
+Time to run engine: 0.0818261
+Time to postprocess and render: 0.0122142
+
+Time to process single frame: 0.0909237
+Time to capture: 0.00948803
+Time to preprocess: 0.000674974
+Time to run engine: 0.0807607
+Time to postprocess and render: 0.00916013
+
+Time to process single frame: 0.0872327
+Time to capture: 0.00551701
+Time to preprocess: 0.000293119
+Time to run engine: 0.0814226
+Time to postprocess and render: 0.0129384
+
+Time to process single frame: 0.0878765
+Time to capture: 0.00674577
+Time to preprocess: 0.000223136
+Time to run engine: 0.0809076
+Time to postprocess and render: 0.0110372
+
+Time to process single frame: 0.0864728
+Time to capture: 0.00411451
+Time to preprocess: 0.000198208
+Time to run engine: 0.0821601
+Time to postprocess and render: 0.0133397
+
+Time to process single frame: 0.0826657
+Time to capture: 0.000310143
+Time to preprocess: 0.000243103
+Time to run engine: 0.0821125
+Time to postprocess and render: 0.0170832
+
+Time to process single frame: 0.0983057
+Time to capture: 0.0117684
+Time to preprocess: 0.000195296
+Time to run engine: 0.086342
+Time to postprocess and render: 0.0182248
+
+Time to process single frame: 0.092194
+Time to capture: 0.00961056
+Time to preprocess: 0.000208639
+Time to run engine: 0.0823748
+Time to postprocess and render: 0.00789341
+
+Time to process single frame: 0.0898334
+Time to capture: 0.00888052
+Time to preprocess: 0.000219647
+Time to run engine: 0.0807333
+Time to postprocess and render: 0.00995901
+
+Time to process single frame: 0.0830638
+Time to capture: 0.000417758
+Time to preprocess: 0.000228288
+Time to run engine: 0.0824178
+Time to postprocess and render: 0.0167758
+
+Time to process single frame: 0.0914308
+Time to capture: 0.0100254
+Time to preprocess: 0.000232703
+Time to run engine: 0.0811727
+Time to postprocess and render: 0.0091137
+
+Time to process single frame: 0.0897414
+Time to capture: 0.00855204
+Time to preprocess: 0.000204159
+Time to run engine: 0.0809852
+Time to postprocess and render: 0.0103111
+
+Time to process single frame: 0.0898126
+Time to capture: 0.00815527
+Time to preprocess: 0.000273695
+Time to run engine: 0.0813836
+Time to postprocess and render: 0.00908922
+
+Time to process single frame: 0.090004
+Time to capture: 0.00893501
+Time to preprocess: 0.00019776
+Time to run engine: 0.0808712
+Time to postprocess and render: 0.00976128
+
+Time to process single frame: 0.0863712
+Time to capture: 0.000994332
+Time to preprocess: 0.000278847
+Time to run engine: 0.0850981
+Time to postprocess and render: 0.0141043
+
+Time to process single frame: 0.0842106
+Time to capture: 0.00164249
+Time to preprocess: 0.000264959
+Time to run engine: 0.0823031
+Time to postprocess and render: 0.0149794
+
+Time to process single frame: 0.0885595
+Time to capture: 0.00725492
+Time to preprocess: 0.000193535
+Time to run engine: 0.081111
+Time to postprocess and render: 0.0115039
+
+Time to process single frame: 0.0878426
+Time to capture: 0.00676599
+Time to preprocess: 0.000194271
+Time to run engine: 0.0808824
+Time to postprocess and render: 0.0120314
+
+Time to process single frame: 0.0917714
+Time to capture: 0.0105691
+Time to preprocess: 0.000223775
+Time to run engine: 0.0809786
+Time to postprocess and render: 0.00798183
+
+Time to process single frame: 0.0885085
+Time to capture: 0.0074459
+Time to preprocess: 0.00026064
+Time to run engine: 0.080802
+Time to postprocess and render: 0.0114482
+
+Time to process single frame: 0.0822356
+Time to capture: 0.000273983
+Time to preprocess: 0.000248416
+Time to run engine: 0.0817132
+Time to postprocess and render: 0.0175413
+
+Time to process single frame: 0.0886742
+Time to capture: 0.0076794
+Time to preprocess: 0.000258272
+Time to run engine: 0.0807366
+Time to postprocess and render: 0.0113073
+
+Time to process single frame: 0.0896337
+Time to capture: 0.00804884
+Time to preprocess: 0.000195968
+Time to run engine: 0.0813889
+Time to postprocess and render: 0.0101984
+
+Time to process single frame: 0.0832359
+Time to capture: 0.000833789
+Time to preprocess: 0.000235007
+Time to run engine: 0.0821671
+Time to postprocess and render: 0.0166508
+
+Time to process single frame: 0.0915106
+Time to capture: 0.00947043
+Time to preprocess: 0.000277599
+Time to run engine: 0.0817626
+Time to postprocess and render: 0.00834202
+
+Time to process single frame: 0.0897859
+Time to capture: 0.00821184
+Time to preprocess: 0.000173407
+Time to run engine: 0.0814007
+Time to postprocess and render: 0.00947895
+
+Time to process single frame: 0.0909603
+Time to capture: 0.00914893
+Time to preprocess: 0.000208383
+Time to run engine: 0.081603
+Time to postprocess and render: 0.00889581
+
+Time to process single frame: 0.0890787
+Time to capture: 0.00767047
+Time to preprocess: 0.00016848
+Time to run engine: 0.0812397
+Time to postprocess and render: 0.0108786
+
+Time to process single frame: 0.0904235
+Time to capture: 0.00912317
+Time to preprocess: 0.000231519
+Time to run engine: 0.0810688
+Time to postprocess and render: 0.0096633
+
+Time to process single frame: 0.09295
+Time to capture: 0.0115447
+Time to preprocess: 0.000230431
+Time to run engine: 0.0811749
+Time to postprocess and render: 0.00663713
+
+Time to process single frame: 0.0893156
+Time to capture: 0.00805172
+Time to preprocess: 0.000298303
+Time to run engine: 0.0809656
+Time to postprocess and render: 0.0107161
+
+Time to process single frame: 0.0933646
+Time to capture: 0.0104502
+Time to preprocess: 0.000243456
+Time to run engine: 0.082671
+Time to postprocess and render: 0.00670791
+
+Time to process single frame: 0.0912555
+Time to capture: 0.00947168
+Time to preprocess: 0.000212127
+Time to run engine: 0.0815717
+Time to postprocess and render: 0.00827805
+
+Time to process single frame: 0.0874116
+Time to capture: 0.000900701
+Time to preprocess: 0.000296671
+Time to run engine: 0.0862142
