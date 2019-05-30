@@ -27,19 +27,20 @@
 #include "../imageNet.h"
 #include "upsampling/plugin.h"
 #include "upsampling/fp16.h"
-//#include "interleaving/plugin.h"
+#include "interleaving/plugin.h"
+#include "slice/plugin.h"
 
 #define DIMS_C(x) x.d[0]
 #define DIMS_H(x) x.d[1]
 #define DIMS_W(x) x.d[2]
 
-const int   DEFAULT_CAMERA = -1;
+const int   DEFAULT_CAMERA = 0;
 const int   MAX_BATCH_SIZE = 1;
-const char* MODEL_NAME     = "/media/sd/kmouraviev/engines/nonbt_engine_shortcuts_640x480.trt";
+const char* MODEL_NAME     = "/home/kirill/Code/CNN_Depth_Reconstruction_VSLAM/engines/resnet_nonbt_shortcuts_320x240.trt";
 const char* INPUT_BLOB     = "tf/Placeholder";
 const char* OUTPUT_BLOB    = "tf/Reshape";
-const int IMG_WIDTH = 640;
-const int IMG_HEIGHT = 480;
+const int IMG_WIDTH = 320;
+const int IMG_HEIGHT = 240;
 
 bool signalRecieved = false;
 
@@ -83,10 +84,15 @@ PluginFieldCollection NearestNeighborUpsamplingPluginCreator::mFC{};
 std::vector<PluginField> NearestNeighborUpsamplingPluginCreator::mPluginAttributes;
 REGISTER_TENSORRT_PLUGIN(NearestNeighborUpsamplingPluginCreator);
 
-//
-//PluginFieldCollection InterleavingPluginCreator::mFC{};
-//std::vector<PluginField> InterleavingPluginCreator::mPluginAttributes;
-//REGISTER_TENSORRT_PLUGIN(InterleavingPluginCreator);
+
+PluginFieldCollection InterleavingPluginCreator::mFC{};
+std::vector<PluginField> InterleavingPluginCreator::mPluginAttributes;
+REGISTER_TENSORRT_PLUGIN(InterleavingPluginCreator);
+
+
+PluginFieldCollection StridedSlicePluginCreator::mFC{};
+std::vector<PluginField> StridedSlicePluginCreator::mPluginAttributes;
+REGISTER_TENSORRT_PLUGIN(StridedSlicePluginCreator);
 
 
 int main( int argc, char** argv )
@@ -195,6 +201,7 @@ int main( int argc, char** argv )
   std::cout << "Camera is open for streaming" << std::endl;
 
   glDisplay* display = glDisplay::Create();
+  std::cout << "glDisplay created" << std::endl;
   glTexture* texture = NULL;
   glTexture* texture2 = NULL;
   glTexture* texture3 = NULL;

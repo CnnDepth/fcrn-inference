@@ -26,6 +26,7 @@
 #include <gst/gst.h>
 #include <string>
 
+
 struct _GstAppSink;
 class QWaitCondition;
 class QMutex;

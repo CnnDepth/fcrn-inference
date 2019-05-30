@@ -50,6 +50,7 @@ set(
     -O3 
 	-gencode arch=compute_53,code=sm_53
 	-gencode arch=compute_62,code=sm_62
+	-gencode arch=compute_61,code=sm_61
 )
 
 # setup CUDNN
@@ -88,13 +89,15 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIR}/lib)
 
 # build C/C++ interface
 include_directories(${PROJECT_INCLUDE_DIR} ${GIE_PATH}/include)
-include_directories(/usr/include/gstreamer-1.0 /usr/lib/aarch64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/aarch64-linux-gnu/glib-2.0/include/)
+include_directories(/home/kirill/TensorRT-5.0.2.6/include /usr/include/gstreamer-1.0 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/x86_64-linux-gnu/glib-2.0/include/)
+link_directories(/home/kirill/TensorRT-5.0.2.6/include)
+link_directories(/home/kirill/TensorRT-5.0.2.6/lib)
 
 file(GLOB inferenceSources *.cpp *.cu calibration/*.cpp)
 file(GLOB inferenceIncludes *.h calibration/*.h)
 
 cuda_add_library(jetson-inference SHARED ${inferenceSources})
-#target_link_libraries(jetson-inference nvcaffe_parser nvinfer)		# gstreamer-0.10 gstbase-0.10 gstapp-0.10 
+target_link_libraries(jetson-inference nvcaffe_parser nvinfer)		# gstreamer-0.10 gstbase-0.10 gstapp-0.10 
 
 
 # transfer all headers to the include directory
@@ -151,6 +154,7 @@ if(CUDA_VERSION_MAJOR GREATER 9)
 #
 #	add_subdirectory(superres-console)
 endif()
+target_link_libraries(jetson-inference nvonnxparser opencv_core opencv_calib3d)
 
 
 # install includes

@@ -3,9 +3,9 @@
 #include <cudnn.h>
 #include "NvInferPlugin.h"
 #include "common.h"
-#include "upsampling.h"
+#include "interleaving.h"
 
-int NearestNeighborUpsamplingPlugin::enqueue(int batchSize, const void*const * inputs, void** outputs, void* workspace, cudaStream_t stream)
+int InterleavingPlugin::enqueue(int batchSize, const void*const * inputs, void** outputs, void* workspace, cudaStream_t stream)
 {
     std::cout << "enquque plugin " << this << std::endl;
     // perform nearest neighbor upsampling using cuda
@@ -13,13 +13,29 @@ int NearestNeighborUpsamplingPlugin::enqueue(int batchSize, const void*const * i
     CHECK(cublasSetStream(mCublas, stream));
     CHECK(cudnnSetStream(mCudnn, stream));
     if (mDataType == DataType::kFLOAT)
-        CHECK(cudaResizeNearestNeighbor<float>((float*)inputs[0], mNbInputChannels, mInputHeight, mInputWidth, (float*)outputs[0], stream));
+        CHECK(cudaInterleave<float>((float*)inputs[0],
+                                    (float*)inputs[1],
+                                    (float*)inputs[2],
+                                    (float*)inputs[3],
+                                    mNbInputChannels,
+                                    mInputHeight,
+                                    mInputWidth,
+                                    (float*)outputs[0],
+                                    stream));
     else
-        CHECK(cudaResizeNearestNeighbor<__half>((__half*)inputs[0], mNbInputChannels, mInputHeight, mInputWidth, (__half*)outputs[0], stream));
+        CHECK(cudaInterleave<__half>((__half*)inputs[0],
+                                    (__half*)inputs[1],
+                                    (__half*)inputs[2],
+                                    (__half*)inputs[3],
+                                    mNbInputChannels,
+                                    mInputHeight,
+                                    mInputWidth,
+                                    (__half*)outputs[0],
+                                    stream));
     return 0;
 }
 
-IPluginV2* NearestNeighborUpsamplingPluginCreator::createPlugin(const char* name, const PluginFieldCollection* fc)
+IPluginV2* InterleavingPluginCreator::createPlugin(const char* name, const PluginFieldCollection* fc)
     {
         std::cout << "create plugin using the creator" << std::endl;
         std::cout << "name is " << name << std::endl;
@@ -43,5 +59,5 @@ IPluginV2* NearestNeighborUpsamplingPluginCreator::createPlugin(const char* name
                 mInputWidth = *(static_cast<const int*>(fields[i].data));
             }
         }
-        return new NearestNeighborUpsamplingPlugin(mNbInputChannels, mInputHeight, mInputWidth);
+        return new InterleavingPlugin(mNbInputChannels, mInputHeight, mInputWidth);
     }

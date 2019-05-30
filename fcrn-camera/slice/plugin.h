@@ -1,32 +1,38 @@
-#ifndef __UPSAMPLING_PLUGIN_H__
-#define __UPSAMPLING_PLUGIN_H__
+#ifndef __STRIDED_SLICE_PLUGIN_H__
+#define __STRIDED_SLICE_PLUGIN_H__
 
 #include <cublas_v2.h>
 #include <cudnn.h>
+#include <cstdio>
 #include "NvInferPlugin.h"
 #include "common.h"
-#include "upsampling.h"
+#include "stridedSlice.h"
 
-class NearestNeighborUpsamplingPlugin : public IPluginV2
+const int SLICE_INPUT_C = 1024;
+const int SLICE_INPUT_H = 16;
+const int SLICE_INPUT_W = 20;
+
+class StridedSlicePlugin : public IPluginV2
 {
 public:
-    NearestNeighborUpsamplingPlugin(int nbInputChannels, int inputHeight, int inputWidth)
+    StridedSlicePlugin(int a, int b, int c)
     {
         std::cout << "Init " << this << " from dims" << std::endl;  
-        mNbInputChannels = nbInputChannels;
+        /*mNbInputChannels = nbInputChannels;
         mInputWidth = inputWidth;
         mInputHeight = inputHeight;
-        std::cout << "set input width: " << mInputWidth << std::endl;
+        std::cout << "input dims: " << mNbInputChannels << ' ' << mInputHeight << ' ' << mInputWidth << std::endl;*/
+        //printf("inputs: %d %d %d %d %d %d %d\n", a, b, c, d, e, f, g);
     }
 
-    NearestNeighborUpsamplingPlugin(const Weights *weights, size_t nbWeights)
+    StridedSlicePlugin(const Weights *weights, size_t nbWeights)
     {
         std::cout << "Init " << this << " from weights" << std::endl;
         std::cout << "I have " << nbWeights << " weights" << endl;
         std::cout << "weights ptr is " << weights << std::endl;
     }
 
-    NearestNeighborUpsamplingPlugin(const void* data, size_t length)
+    StridedSlicePlugin(const void* data, size_t length)
     {
         std::cout << "Init " << this << " from data and length" << std::endl;
         const char* d = static_cast<const char*>(data), *a = d;
@@ -38,7 +44,7 @@ public:
         assert(d == a + length);
     }
 
-    ~NearestNeighborUpsamplingPlugin()
+    ~StridedSlicePlugin()
     {
         std::cout << "delete plugin " << this << std::endl;
     }
@@ -51,14 +57,17 @@ public:
 
     Dims getOutputDimensions(int index, const Dims* inputs, int nbInputDims) override
     {
-        std::cout << "Get output dimensions of " << this << std::endl;
+        std::cout << "Slice: Get output dimensions of " << this << std::endl;
         std::cout << "input dims are: " << inputs[0].d[0] << ' ' << inputs[0].d[1] << ' ' << inputs[0].d[2] << std::endl;
-        assert(index == 0 && nbInputDims == 1 && inputs[0].nbDims == 3);
+        assert(index == 0 && nbInputDims == 3 && inputs[0].nbDims == 3);
+        std::cout << "Dims of first  input: " << inputs[0].d[0] << ' ' << inputs[0].d[1] << ' ' << inputs[0].d[2] << std::endl;
+        std::cout << "Dims of second  input: " << inputs[1].d[0] << ' ' << inputs[1].d[1] << ' ' << inputs[1].d[2] << std::endl;
+        std::cout << "Dims of third  input: " << inputs[2].d[0] << ' ' << inputs[2].d[1] << ' ' << inputs[2].d[2] << std::endl;
         mNbInputChannels = inputs[0].d[0];
         mInputHeight = inputs[0].d[1];
         mInputWidth = inputs[0].d[2];
         std::cout << "set input width " << mInputWidth << std::endl;
-        return nvinfer1::Dims3(inputs[0].d[0], 2 * inputs[0].d[1], 2 * inputs[0].d[2]);
+        return nvinfer1::Dims3(inputs[0].d[0], inputs[0].d[1] - 1, inputs[0].d[2]);
     }
 
     bool supportsFormat(DataType type, PluginFormat format) const override 
@@ -122,7 +131,7 @@ public:
     const char* getPluginType() const override 
     { 
         std::cout << "get type of " << this << std::endl;
-        return "ResizeNearestNeighbor";
+        return "Slice";
     }
 
     const char* getPluginVersion() const override 
@@ -135,7 +144,7 @@ public:
 
     IPluginV2* clone() const override
     {
-        return new NearestNeighborUpsamplingPlugin(mNbInputChannels, mInputHeight, mInputWidth);
+        return new StridedSlicePlugin(0, 0, 0);
     }
 
     void setPluginNamespace(const char* libNamespace) override { mNamespace = libNamespace; }
@@ -180,10 +189,10 @@ private:
 };
 
 
-class NearestNeighborUpsamplingPluginCreator: public IPluginCreator
+class StridedSlicePluginCreator: public IPluginCreator
 {
 public:
-    NearestNeighborUpsamplingPluginCreator()
+    StridedSlicePluginCreator()
     {
         std::cout << "Create plugin creator" << std::endl;
         mPluginAttributes.emplace_back(PluginField("nbInputChannels", nullptr, PluginFieldType::kINT32, 1));
@@ -194,12 +203,12 @@ public:
         mFC.fields = mPluginAttributes.data();
     }
 
-    ~NearestNeighborUpsamplingPluginCreator() {}
+    ~StridedSlicePluginCreator() {}
 
     const char* getPluginName() const override 
     {
         std::cout << "get plugin name" << std::endl;
-        return "ResizeNearestNeighbor"; 
+        return "Slice"; 
     }
 
     const char* getPluginVersion() const override
@@ -217,7 +226,7 @@ public:
         std::cout << "deserialize plugin using the creator" << std::endl;
         //This object will be deleted when the network is destroyed, which will
         //call Concat::destroy()
-        return new NearestNeighborUpsamplingPlugin(serialData, serialLength);
+        return new StridedSlicePlugin(serialData, serialLength);
     }
 
     void setPluginNamespace(const char* libNamespace) override { mNamespace = libNamespace; }
@@ -227,6 +236,6 @@ private:
     static PluginFieldCollection mFC;
     static std::vector<PluginField> mPluginAttributes;
     std::string mNamespace = "";
-    int mNbInputChannels, mInputHeight, mInputWidth;
+    int mIndex, mT;
 };
 #endif

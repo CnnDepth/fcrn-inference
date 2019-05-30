@@ -1,16 +1,16 @@
-#ifndef __UPSAMPLING_PLUGIN_H__
-#define __UPSAMPLING_PLUGIN_H__
+#ifndef __INTERLEAVING_PLUGIN_H__
+#define __INTERLEAVING_PLUGIN_H__
 
 #include <cublas_v2.h>
 #include <cudnn.h>
 #include "NvInferPlugin.h"
 #include "common.h"
-#include "upsampling.h"
+#include "interleaving.h"
 
-class NearestNeighborUpsamplingPlugin : public IPluginV2
+class InterleavingPlugin : public IPluginV2
 {
 public:
-    NearestNeighborUpsamplingPlugin(int nbInputChannels, int inputHeight, int inputWidth)
+    InterleavingPlugin(int nbInputChannels, int inputHeight, int inputWidth)
     {
         std::cout << "Init " << this << " from dims" << std::endl;  
         mNbInputChannels = nbInputChannels;
@@ -19,14 +19,14 @@ public:
         std::cout << "set input width: " << mInputWidth << std::endl;
     }
 
-    NearestNeighborUpsamplingPlugin(const Weights *weights, size_t nbWeights)
+    InterleavingPlugin(const Weights *weights, size_t nbWeights)
     {
         std::cout << "Init " << this << " from weights" << std::endl;
         std::cout << "I have " << nbWeights << " weights" << endl;
         std::cout << "weights ptr is " << weights << std::endl;
     }
 
-    NearestNeighborUpsamplingPlugin(const void* data, size_t length)
+    InterleavingPlugin(const void* data, size_t length)
     {
         std::cout << "Init " << this << " from data and length" << std::endl;
         const char* d = static_cast<const char*>(data), *a = d;
@@ -38,7 +38,7 @@ public:
         assert(d == a + length);
     }
 
-    ~NearestNeighborUpsamplingPlugin()
+    ~InterleavingPlugin()
     {
         std::cout << "delete plugin " << this << std::endl;
     }
@@ -53,7 +53,7 @@ public:
     {
         std::cout << "Get output dimensions of " << this << std::endl;
         std::cout << "input dims are: " << inputs[0].d[0] << ' ' << inputs[0].d[1] << ' ' << inputs[0].d[2] << std::endl;
-        assert(index == 0 && nbInputDims == 1 && inputs[0].nbDims == 3);
+        assert(index == 0 && nbInputDims == 4 && inputs[0].nbDims == 3);
         mNbInputChannels = inputs[0].d[0];
         mInputHeight = inputs[0].d[1];
         mInputWidth = inputs[0].d[2];
@@ -122,7 +122,7 @@ public:
     const char* getPluginType() const override 
     { 
         std::cout << "get type of " << this << std::endl;
-        return "ResizeNearestNeighbor";
+        return "InterleaveNCHW";
     }
 
     const char* getPluginVersion() const override 
@@ -135,7 +135,7 @@ public:
 
     IPluginV2* clone() const override
     {
-        return new NearestNeighborUpsamplingPlugin(mNbInputChannels, mInputHeight, mInputWidth);
+        return new InterleavingPlugin(mNbInputChannels, mInputHeight, mInputWidth);
     }
 
     void setPluginNamespace(const char* libNamespace) override { mNamespace = libNamespace; }
@@ -180,10 +180,10 @@ private:
 };
 
 
-class NearestNeighborUpsamplingPluginCreator: public IPluginCreator
+class InterleavingPluginCreator: public IPluginCreator
 {
 public:
-    NearestNeighborUpsamplingPluginCreator()
+    InterleavingPluginCreator()
     {
         std::cout << "Create plugin creator" << std::endl;
         mPluginAttributes.emplace_back(PluginField("nbInputChannels", nullptr, PluginFieldType::kINT32, 1));
@@ -194,12 +194,12 @@ public:
         mFC.fields = mPluginAttributes.data();
     }
 
-    ~NearestNeighborUpsamplingPluginCreator() {}
+    ~InterleavingPluginCreator() {}
 
     const char* getPluginName() const override 
     {
         std::cout << "get plugin name" << std::endl;
-        return "ResizeNearestNeighbor"; 
+        return "InterleaveNCHW"; 
     }
 
     const char* getPluginVersion() const override
@@ -217,7 +217,7 @@ public:
         std::cout << "deserialize plugin using the creator" << std::endl;
         //This object will be deleted when the network is destroyed, which will
         //call Concat::destroy()
-        return new NearestNeighborUpsamplingPlugin(serialData, serialLength);
+        return new InterleavingPlugin(serialData, serialLength);
     }
 
     void setPluginNamespace(const char* libNamespace) override { mNamespace = libNamespace; }
