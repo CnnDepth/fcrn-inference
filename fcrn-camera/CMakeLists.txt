@@ -3,7 +3,7 @@ file(GLOB fcrnCameraSources *.cpp upsampling/*cu upsampling/*.cpp interleaving/*
 file(GLOB fcrnCameraIncludes *.h upsampling/*.h interleaving/*.h slice/*.h)
 
 cuda_add_library(fcrn-camera SHARED ${fcrnCameraSources})
-target_link_libraries( fcrn-camera jetson-utils common nvinfer jetson-inference cudnn /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcublas.so )
+target_link_libraries( fcrn-camera jetson-utils common ${PATH_TO_TENSORRT_LIB}/libnvinfer.so jetson-inference ${PATH_TO_CUDNN}/libcudnn.so /usr/local/cuda/lib64/libcublas.so )
 
 # transfer all headers to the include directory
 foreach(include ${fcrnCameraIncludes})

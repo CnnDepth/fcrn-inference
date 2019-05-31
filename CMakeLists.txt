@@ -11,6 +11,39 @@ message(" ")
 message("           git submodule update --init") 
 message("\n")
 
+# find TensorRT package
+if ( NOT DEFINED PATH_TO_TENSORRT_LIB )
+	set(PATH_TO_TENSORRT_LIB /usr/lib/aarch64-linux-gnu)
+endif()
+if ( NOT DEFINED PATH_TO_TENSORRT_INCLUDE )
+	set(PATH_TO_TENSORRT_INCLUDE /usr/include/aarch64-linux-gnu)
+endif()
+message("TensorRT libraries path: ${PATH_TO_TENSORRT_LIB}")
+message("TensorRT includes path: ${PATH_TO_TENSORRT_INCLUDE}")
+
+if ( NOT EXISTS "${PATH_TO_TENSORRT_LIB}" )
+	message(FATAL_ERROR "TensorRT libraries not found. Set correct PATH_TO_TENSORRT_LIB")
+endif()
+if ( NOT EXISTS "${PATH_TO_TENSORRT_INCLUDE}" )
+	message(FATAL_ERROR "TensorRT includes not found. Set correct PATH_TO_TENSORRT_INCLUDE")
+endif()
+
+# find CuDNN
+if ( NOT DEFINED PATH_TO_CUDNN )
+	set( CUDNN_PATHS /usr/local/cuda/lib64 /usr/lib/aarch64-linux-gnu )
+	foreach(path ${CUDNN_PATHS})
+		if ( EXISTS ${path}/libcudnn.so )
+			set( PATH_TO_CUDNN ${path} )
+		endif()
+	endforeach()
+endif()
+if ( EXISTS ${PATH_TO_CUDNN}/libcudnn.so )
+	message("CuDNN found in ${PATH_TO_CUDNN}")
+else()
+	message("CuDNN not found. Set correct PATH_TO_CUDNN")
+endif()
+
+
 if( NOT EXISTS "${PROJECT_SOURCE_DIR}/utils/.git" )
 	message("Note:  required git submodules have not been detected.")
 	message("       first, please run the following command from the")
@@ -88,7 +121,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIR}/lib)
 
 # build C/C++ interface
 include_directories(${PROJECT_INCLUDE_DIR} ${GIE_PATH}/include)
-include_directories(/usr/include/gstreamer-1.0 /usr/lib/aarch64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/aarch64-linux-gnu/glib-2.0/include/)
+include_directories(/usr/include/gstreamer-1.0 /usr/lib/aarch64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/aarch64-linux-gnu/glib-2.0/include /usr/lib/x86_64-linux-gnu/glib-2.0/include ${PATH_TO_TENSORRT_INCLUDE})
 
 file(GLOB inferenceSources *.cpp *.cu)
 file(GLOB inferenceIncludes *.h)
@@ -126,11 +159,11 @@ add_subdirectory(common)
 add_subdirectory(fcrn-camera)
 
 #target_link_libraries( fcrn-camera jetson-utils nvinfer )
-target_link_libraries(jetson-inference jetson-utils nvinfer nvcaffe_parser)
+target_link_libraries(jetson-inference jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so ${PATH_TO_TENSORRT_LIB}/libnvcaffe_parser.so)
 
 #create executable example
 cuda_add_executable(fcrn-inference main.cpp)
-target_link_libraries( fcrn-inference jetson-utils nvinfer jetson-inference common fcrn-camera cudnn /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcublas.so )
+target_link_libraries( fcrn-inference jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so jetson-inference common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so /usr/local/cuda/lib64/libcublas.so )
 
 if(CUDA_VERSION_MAJOR GREATER 9)
 	target_link_libraries(jetson-inference nvonnxparser opencv_core opencv_calib3d)
