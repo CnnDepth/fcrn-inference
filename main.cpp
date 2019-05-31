@@ -24,19 +24,19 @@
 #include "cudaResize.h"
 #include "cudaOverlay.h"
 #include "cudaUtility.h"
-#include "../imageNet.h"
-#include "upsampling/plugin.h"
-#include "upsampling/fp16.h"
-#include "interleaving/plugin.h"
-#include "slice/plugin.h"
+#include "processDepth.h"
+#include "upsamplingPlugin.h"
+#include "fp16.h"
+#include "slicePlugin.h"
+#include "interleavingPlugin.h"
 
 #define DIMS_C(x) x.d[0]
 #define DIMS_H(x) x.d[1]
 #define DIMS_W(x) x.d[2]
 
-const int   DEFAULT_CAMERA = 0;
+const int   DEFAULT_CAMERA = -1;
 const int   MAX_BATCH_SIZE = 1;
-const char* MODEL_NAME     = "/home/kirill/Code/CNN_Depth_Reconstruction_VSLAM/engines/resnet_nonbt_shortcuts_320x240.trt";
+const char* MODEL_NAME     = "/media/sd/kmouraviev/engines/nonbt_engine_shortcuts_320x240.trt";
 const char* INPUT_BLOB     = "tf/Placeholder";
 const char* OUTPUT_BLOB    = "tf/Reshape";
 const int IMG_WIDTH = 320;
@@ -56,13 +56,6 @@ cudaError_t cudaPreImageNetMean(float4* input, size_t inputWidth, size_t inputHe
 				             float* output, size_t outputWidth, size_t outputHeight, 
 						   const float3& mean_value, cudaStream_t stream);
 
-/*class Logger : public nvinfer1::ILogger
-{
-  void log(nvinfer1::ILogger::Severity severity, const char* msg) override
-  {
-    std::cout << msg << std::endl;
-  }
-} gLogger;*/
 Logger gLogger;
 
 void getColor(float x, float&b, float&g, float&r) 
@@ -84,11 +77,9 @@ PluginFieldCollection NearestNeighborUpsamplingPluginCreator::mFC{};
 std::vector<PluginField> NearestNeighborUpsamplingPluginCreator::mPluginAttributes;
 REGISTER_TENSORRT_PLUGIN(NearestNeighborUpsamplingPluginCreator);
 
-
 PluginFieldCollection InterleavingPluginCreator::mFC{};
 std::vector<PluginField> InterleavingPluginCreator::mPluginAttributes;
 REGISTER_TENSORRT_PLUGIN(InterleavingPluginCreator);
-
 
 PluginFieldCollection StridedSlicePluginCreator::mFC{};
 std::vector<PluginField> StridedSlicePluginCreator::mPluginAttributes;
@@ -136,9 +127,6 @@ int main( int argc, char** argv )
 //Set input info + alloc memory
   const int inputIndex = engine->getBindingIndex( INPUT_BLOB );
   nvinfer1::Dims inputDims = engine->getBindingDimensions( inputIndex );
-  std::cout << "-  Input binding index: " << inputIndex << std::endl;
-  std::cout << "- Number of dimensions: " << inputDims.nbDims << std::endl;
-  std::cout << "- c: " << DIMS_C(inputDims) << " h: " << DIMS_H(inputDims) << " w: " << DIMS_W(inputDims) << std::endl;
 
   std::size_t inputSize = MAX_BATCH_SIZE * DIMS_C(inputDims) * DIMS_H(inputDims) * DIMS_W(inputDims) * sizeof(float);
   std::size_t inputSizeUint8 = MAX_BATCH_SIZE * DIMS_C(inputDims) * DIMS_H(inputDims) * DIMS_W(inputDims) * sizeof(uint8_t);
@@ -161,10 +149,6 @@ int main( int argc, char** argv )
   nvinfer1::Dims outputDims = engine->getBindingDimensions( outputIndex );
   std::size_t outputSize = MAX_BATCH_SIZE * DIMS_C(outputDims) * DIMS_H(outputDims) * 								DIMS_W(outputDims) * sizeof(float);
   std::size_t engineOutputSize = outputSize;
-
-  std::cout << "- Output binding index: " << outputIndex << std::endl;
-  std::cout << "- Number of dimensions: " << outputDims.nbDims << std::endl;
-  std::cout << "- c: " << DIMS_C(outputDims) << " h: " << DIMS_H(outputDims) << " w: " << DIMS_W(outputDims) << std::endl;
 
   if( !cudaAllocMapped( (void**)&outputCPU, (void**)&outputCUDA, outputSize) )
   {
@@ -201,7 +185,6 @@ int main( int argc, char** argv )
   std::cout << "Camera is open for streaming" << std::endl;
 
   glDisplay* display = glDisplay::Create();
-  std::cout << "glDisplay created" << std::endl;
   glTexture* texture = NULL;
   glTexture* texture2 = NULL;
   glTexture* texture3 = NULL;
@@ -285,12 +268,6 @@ int main( int argc, char** argv )
     //measure execution time
     std::chrono::duration<double> elapsed = finish - start;
     std::cout << "Time to process single frame: " << elapsed.count() << std::endl;
-    elapsed = moment_after_capture - start;
-    std::cout << "Time to capture: " << elapsed.count() << std::endl;
-    elapsed = moment_after_preprocess - moment_after_capture;
-    std::cout << "Time to preprocess: " << elapsed.count() << std::endl;
-    elapsed = finish - moment_after_preprocess;
-    std::cout << "Time to run engine: " << elapsed.count() << std::endl;
 
     // update display
     if( display != NULL )
@@ -387,10 +364,6 @@ int main( int argc, char** argv )
 
       display->EndRender();
     }
-    //measure rendering time
-    auto after_rendering = std::chrono::high_resolution_clock::now();
-    elapsed = after_rendering - finish;
-    std::cout << "Time to postprocess and render: " << elapsed.count() << std::endl << std::endl;
   }
 
   if( camera != nullptr )

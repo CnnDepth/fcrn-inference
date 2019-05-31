@@ -67,14 +67,12 @@ else()
 	
 	# build C/C++ interface
 	include_directories(${PROJECT_INCLUDE_DIR})
-	#include_directories(/usr/include/gstreamer-1.0 /usr/include/glib-2.0 /usr/include/libxml2)
+	#include_directories(/usr/include/gstreamer-1.0 /usr/lib/aarch64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/aarch64-linux-gnu/glib-2.0/include/)
 
 endif()
 
-include_directories(/home/kirill/TensorRT-5.0.2.6/include)
-include_directories(/usr/include/gstreamer-1.0 /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/include/ /usr/lib/x86_64-linux-gnu/glib-2.0/include/)
-link_directories(/home/kirill/TensorRT-5.0.2.6/include)
-link_directories(/home/kirill/TensorRT-5.0.2.6/lib)
+include_directories(/usr/include/gstreamer-1.0 /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/aarch64-linux-gnu/gstreamer-1.0/include /usr/lib/x86_64-linux-gnu/gstreamer-1.0/include/ /usr/lib/aarch64-linux-gnu/glib-2.0/include/ /usr/lib/x86_64-linux-gnu/glib-2.0/include/)
+
 
 # build library
 file(GLOB jetsonUtilitySources *.cpp camera/*.cpp codec/*.cpp cuda/*.cu display/*.cpp input/*.cpp network/*.cpp threads/*.cpp)
