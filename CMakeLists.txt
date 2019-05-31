@@ -128,6 +128,10 @@ add_subdirectory(fcrn-camera)
 #target_link_libraries( fcrn-camera jetson-utils nvinfer )
 target_link_libraries(jetson-inference jetson-utils nvinfer nvcaffe_parser)
 
+#create executable example
+cuda_add_executable(fcrn-inference main.cpp)
+target_link_libraries( fcrn-inference jetson-utils nvinfer jetson-inference common fcrn-camera cudnn /usr/local/cuda-10.0/targets/aarch64-linux/lib/libcublas.so )
+
 if(CUDA_VERSION_MAJOR GREATER 9)
 	target_link_libraries(jetson-inference nvonnxparser opencv_core opencv_calib3d)
 #
