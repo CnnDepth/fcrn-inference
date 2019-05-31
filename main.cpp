@@ -37,7 +37,7 @@
 
 const int   DEFAULT_CAMERA = -1;
 const int   MAX_BATCH_SIZE = 1;
-const char* MODEL_NAME     = "/media/sd/kmouraviev/engines/nonbt_engine_shortcuts_320x240.trt";
+const char* MODEL_NAME     = "engine.trt";
 const char* INPUT_BLOB     = "tf/Placeholder";
 const char* OUTPUT_BLOB    = "tf/Reshape";
 const int IMG_WIDTH = 320;
