@@ -24,6 +24,7 @@
 #include "cudaResize.h"
 #include "cudaOverlay.h"
 #include "cudaUtility.h"
+#include "preprocessRGB.h"
 #include "processDepth.h"
 #include "upsamplingPlugin.h"
 #include "fp16.h"
