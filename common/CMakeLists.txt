@@ -3,7 +3,7 @@ file(GLOB commonSources *.cpp *.cu)
 file(GLOB commonIncludes *.h)
 
 cuda_add_library(common SHARED ${commonSources})
-target_link_libraries(common jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so jetson-inference ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so )
+target_link_libraries(common jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so )
 
 # transfer all headers to the include directory
 foreach(include ${commonIncludes})

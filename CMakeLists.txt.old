@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 2.8)
 project(jetson-inference)
 
@@ -39,7 +40,7 @@ endif()
 if ( EXISTS ${PATH_TO_CUDNN}/libcudnn.so )
 	message("CuDNN found in ${PATH_TO_CUDNN}")
 else()
-	message("CuDNN not found. Set correct PATH_TO_CUDNN")
+	message("Could not find ${PATH_TO_CUDNN}/libcudnn.so. Set correct PATH_TO_CUDNN")
 endif()
 
 # find CuBLAS
@@ -141,10 +142,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_OUTPUT_DIR}/lib)
 include_directories(${PROJECT_INCLUDE_DIR} ${GIE_PATH}/include)
 include_directories(/usr/include/gstreamer-1.0 /usr/lib/aarch64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/aarch64-linux-gnu/glib-2.0/include /usr/lib/x86_64-linux-gnu/glib-2.0/include ${PATH_TO_TENSORRT_INCLUDE})
 
-#file(GLOB inferenceSources *.cpp *.cu)
-#file(GLOB inferenceIncludes *.h)
+file(GLOB inferenceSources *.cpp *.cu)
+file(GLOB inferenceIncludes *.h)
 
-#cuda_add_library(jetson-inference SHARED ${inferenceSources})
+cuda_add_library(jetson-inference SHARED ${inferenceSources})
 #target_link_libraries(jetson-inference nvcaffe_parser nvinfer)		# gstreamer-0.10 gstbase-0.10 gstapp-0.10 
 
 
@@ -154,19 +155,42 @@ foreach(include ${inferenceIncludes})
 	configure_file(${include} ${PROJECT_INCLUDE_DIR} COPYONLY)
 endforeach()
 
+
+# create symbolic link for network data
+#execute_process( COMMAND "${CMAKE_COMMAND}" "-E" "create_symlink" "${PROJECT_SOURCE_DIR}/data/networks" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/networks" )
+  
+  
+# copy image data
+#file(GLOB imageData ${PROJECT_SOURCE_DIR}/data/images/*)
+
+#foreach(image ${imageData})
+#	message("-- Copying ${image}")
+#	file(COPY ${image} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+	#configure_file(${include} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} COPYONLY)
+#endforeach()
+
+
+# copy tools
+#file(COPY "tools/segnet-batch.sh" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
 add_subdirectory(jetson-utils)
 add_subdirectory(common)
 add_subdirectory(fcrn-camera)
 
-#create executable example
-if ( DEFINED BUILD_INFERENCE_EXAMPLE )
-	cuda_add_executable(fcrn-inference main.cpp)
-	target_link_libraries( fcrn-inference jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so nvcaffe_parser)
-endif()
+#target_link_libraries( fcrn-camera jetson-utils nvinfer )
+target_link_libraries(jetson-inference jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so ${PATH_TO_TENSORRT_LIB}/libnvcaffe_parser.so)
 
-if ( DEFINED BUILD_ENGINE_BUILDER )
-	cuda_add_executable( fcrn-engine-builder fcrnEngineBuilder.cpp )
-	target_link_libraries( fcrn-engine-builder jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so nvcaffe_parser )
+#create executable example
+cuda_add_executable(fcrn-inference main.cpp)
+target_link_libraries( fcrn-inference jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so jetson-inference common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so /usr/local/cuda/lib64/libcublas.so )
+
+if(CUDA_VERSION_MAJOR GREATER 9)
+	target_link_libraries(jetson-inference nvonnxparser opencv_core opencv_calib3d)
+#
+#	add_subdirectory(homography-console)
+#	add_subdirectory(homography-camera)
+#
+#	add_subdirectory(superres-console)
 endif()
 
 
@@ -177,4 +201,10 @@ endforeach()
 
 # install symlink to networks
 install(CODE "execute_process( COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_SOURCE_DIR}/data/networks ${CMAKE_INSTALL_PREFIX}/bin/networks )" )
+
+# install the shared library
+install(TARGETS jetson-inference DESTINATION lib EXPORT jetson-inferenceConfig)
+
+# install the cmake project, for importing
+install(EXPORT jetson-inferenceConfig DESTINATION share/jetson-inference/cmake)
 
