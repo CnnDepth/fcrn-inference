@@ -40,7 +40,17 @@ endif()
 if ( EXISTS ${PATH_TO_CUDNN}/libcudnn.so )
 	message("CuDNN found in ${PATH_TO_CUDNN}")
 else()
-	message("CuDNN not found. Set correct PATH_TO_CUDNN")
+	message("Could not find ${PATH_TO_CUDNN}/libcudnn.so. Set correct PATH_TO_CUDNN")
+endif()
+
+# find CuBLAS
+if ( NOT DEFINED PATH_TO_CUBLAS )
+	set( PATH_TO_CUBLAS /usr/local/cuda/lib64 )
+endif()
+if ( EXISTS ${PATH_TO_CUBLAS}/libcublas.so )
+	message("CuBLAS found in ${PATH_TO_CUBLAS}")
+else()
+	message("Could not find ${PATH_TO_CUBLAS}/libcublas.so. Set correct PATH_TO_CUDNN")
 endif()
 
 
