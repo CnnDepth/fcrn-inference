@@ -1,2 +1,6 @@
 build
 fcrn-camera/build
+fcrn-camera/x86_64
+fcrn-camera/fcrn-camera
+fcrn-camera/utils
+fcrn-camera/CMakeFiles

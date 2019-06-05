@@ -44,7 +44,7 @@ else()
 endif()
 
 
-if( NOT EXISTS "${PROJECT_SOURCE_DIR}/utils/.git" )
+if( NOT EXISTS "${PROJECT_SOURCE_DIR}/jetson-utils/.git" )
 	message("Note:  required git submodules have not been detected.")
 	message("       first, please run the following command from the")
 	message("       the project's root directory to clone them:")
@@ -81,8 +81,16 @@ set(
 	CUDA_NVCC_FLAGS
 	${CUDA_NVCC_FLAGS}; 
     -O3 
+    -gencode arch=compute_30,code=sm_30
+    -gencode arch=compute_35,code=sm_35
+    -gencode arch=compute_37,code=sm_37
+    -gencode arch=compute_50,code=sm_50
+    -gencode arch=compute_52,code=sm_52
 	-gencode arch=compute_53,code=sm_53
+	-gencode arch=compute_60,code=sm_60
+	-gencode arch=compute_61,code=sm_61
 	-gencode arch=compute_62,code=sm_62
+	-gencode arch=compute_70,code=sm_70
 )
 
 # setup CUDNN
@@ -96,6 +104,7 @@ if(CUDA_VERSION_MAJOR GREATER 9)
 		CUDA_NVCC_FLAGS
 		${CUDA_NVCC_FLAGS}; 
 		-gencode arch=compute_72,code=sm_72
+		-gencode arch=compute_75,code=sm_75
 	)
 
 	# OpenCV used for findHomography() and decomposeHomography()
@@ -154,7 +163,7 @@ endforeach()
 # copy tools
 #file(COPY "tools/segnet-batch.sh" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-add_subdirectory(utils)
+add_subdirectory(jetson-utils)
 add_subdirectory(common)
 add_subdirectory(fcrn-camera)
 
