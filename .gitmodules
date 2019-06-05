@@ -1,0 +1,3 @@
+[submodule "jetson-utils"]
+	path = jetson-utils
+	url = https://github.com/dusty-nv/jetson-utils
