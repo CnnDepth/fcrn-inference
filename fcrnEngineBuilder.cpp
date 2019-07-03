@@ -197,18 +197,6 @@ void doInference(IExecutionContext& context, T* inputData, T* output, size_t bat
     std::cout << "Freeing output done" << std::endl;
 }
 
-PluginFieldCollection NearestNeighborUpsamplingPluginCreator::mFC{};
-std::vector<PluginField> NearestNeighborUpsamplingPluginCreator::mPluginAttributes;
-REGISTER_TENSORRT_PLUGIN(NearestNeighborUpsamplingPluginCreator);
-
-PluginFieldCollection InterleavingPluginCreator::mFC{};
-std::vector<PluginField> InterleavingPluginCreator::mPluginAttributes;
-REGISTER_TENSORRT_PLUGIN( InterleavingPluginCreator );
-
-PluginFieldCollection StridedSlicePluginCreator::mFC{};
-std::vector<PluginField> StridedSlicePluginCreator::mPluginAttributes;
-REGISTER_TENSORRT_PLUGIN( StridedSlicePluginCreator );
-
 
 void processImage(const char* imageFile, const char* outputImageFile, IExecutionContext* context)
 {
