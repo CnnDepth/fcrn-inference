@@ -35,7 +35,7 @@
 #define DIMS_H(x) x.d[1]
 #define DIMS_W(x) x.d[2]
 
-const int   DEFAULT_CAMERA = -1;
+const int   DEFAULT_CAMERA = 0;
 const int   MAX_BATCH_SIZE = 1;
 const char* MODEL_NAME     = "engine.trt";
 const char* INPUT_BLOB     = "tf/Placeholder";
@@ -73,18 +73,6 @@ void getColor(float x, float&b, float&g, float&r)
   else if (2 <= x && x <= 3) b = x - 2;
   else if (5 <= x && x <= 6) b = 1.0f - (x - 5);
 }
-
-PluginFieldCollection NearestNeighborUpsamplingPluginCreator::mFC{};
-std::vector<PluginField> NearestNeighborUpsamplingPluginCreator::mPluginAttributes;
-REGISTER_TENSORRT_PLUGIN(NearestNeighborUpsamplingPluginCreator);
-
-PluginFieldCollection InterleavingPluginCreator::mFC{};
-std::vector<PluginField> InterleavingPluginCreator::mPluginAttributes;
-REGISTER_TENSORRT_PLUGIN(InterleavingPluginCreator);
-
-PluginFieldCollection StridedSlicePluginCreator::mFC{};
-std::vector<PluginField> StridedSlicePluginCreator::mPluginAttributes;
-REGISTER_TENSORRT_PLUGIN(StridedSlicePluginCreator);
 
 
 int main( int argc, char** argv )

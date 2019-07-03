@@ -199,4 +199,9 @@ private:
     std::string mNamespace = "";
     int mNbInputChannels, mInputHeight, mInputWidth;
 };
+
+PluginFieldCollection NearestNeighborUpsamplingPluginCreator::mFC{};
+std::vector<PluginField> NearestNeighborUpsamplingPluginCreator::mPluginAttributes;
+REGISTER_TENSORRT_PLUGIN(NearestNeighborUpsamplingPluginCreator);
+
 #endif

@@ -18,23 +18,23 @@ int NearestNeighborUpsamplingPlugin::enqueue(int batchSize, const void*const * i
 }
 
 IPluginV2* NearestNeighborUpsamplingPluginCreator::createPlugin(const char* name, const PluginFieldCollection* fc)
+{
+    const PluginField* fields = fc->fields;
+    for (int i = 0; i < fc->nbFields; ++i)
     {
-        const PluginField* fields = fc->fields;
-        for (int i = 0; i < fc->nbFields; ++i)
+        const char* attrName = fields[i].name;
+        if (!strcmp(attrName, "nbInputChannels"))
         {
-            const char* attrName = fields[i].name;
-            if (!strcmp(attrName, "nbInputChannels"))
-            {
-                mNbInputChannels = *(static_cast<const int*>(fields[i].data));
-            }
-            if (!strcmp(attrName, "inputHeight"))
-            {
-                mInputHeight = *(static_cast<const int*>(fields[i].data));
-            }
-            if (!strcmp(attrName, "inputWidth"))
-            {
-                mInputWidth = *(static_cast<const int*>(fields[i].data));
-            }
+            mNbInputChannels = *(static_cast<const int*>(fields[i].data));
         }
-        return new NearestNeighborUpsamplingPlugin(mNbInputChannels, mInputHeight, mInputWidth);
+        if (!strcmp(attrName, "inputHeight"))
+        {
+            mInputHeight = *(static_cast<const int*>(fields[i].data));
+        }
+        if (!strcmp(attrName, "inputWidth"))
+        {
+            mInputWidth = *(static_cast<const int*>(fields[i].data));
+        }
     }
+    return new NearestNeighborUpsamplingPlugin(mNbInputChannels, mInputHeight, mInputWidth);
+}

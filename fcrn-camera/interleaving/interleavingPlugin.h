@@ -198,4 +198,9 @@ private:
     std::string mNamespace = "";
     int mNbInputChannels, mInputHeight, mInputWidth;
 };
+
+PluginFieldCollection InterleavingPluginCreator::mFC{};
+std::vector<PluginField> InterleavingPluginCreator::mPluginAttributes;
+REGISTER_TENSORRT_PLUGIN(InterleavingPluginCreator);
+
 #endif

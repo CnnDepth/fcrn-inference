@@ -197,4 +197,9 @@ private:
     std::string mNamespace = "";
     int mIndex, mT;
 };
+
+PluginFieldCollection StridedSlicePluginCreator::mFC{};
+std::vector<PluginField> StridedSlicePluginCreator::mPluginAttributes;
+REGISTER_TENSORRT_PLUGIN(StridedSlicePluginCreator);
+
 #endif

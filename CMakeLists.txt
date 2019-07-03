@@ -161,12 +161,12 @@ add_subdirectory(fcrn-camera)
 #create executable example
 if ( DEFINED BUILD_INFERENCE_EXAMPLE )
 	cuda_add_executable(fcrn-inference main.cpp)
-	target_link_libraries( fcrn-inference jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so nvcaffe_parser)
+	target_link_libraries( fcrn-inference jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so ${PATH_TO_TENSORRT_LIB}/libnvcaffe_parser.so)
 endif()
 
 if ( DEFINED BUILD_ENGINE_BUILDER )
 	cuda_add_executable( fcrn-engine-builder fcrnEngineBuilder.cpp )
-	target_link_libraries( fcrn-engine-builder jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so nvcaffe_parser )
+	target_link_libraries( fcrn-engine-builder jetson-utils ${PATH_TO_TENSORRT_LIB}/libnvinfer.so common fcrn-camera ${PATH_TO_CUDNN}/libcudnn.so ${PATH_TO_CUBLAS}/libcublas.so ${PATH_TO_TENSORRT_LIB}/libnvcaffe_parser.so )
 endif()
 
 
