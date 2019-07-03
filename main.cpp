@@ -31,6 +31,7 @@
 #include "slicePlugin.h"
 #include "interleavingPlugin.h"
 #include "argsParser.h"
+#include "preprocessRGB.h"
 
 #define DIMS_C(x) x.d[0]
 #define DIMS_H(x) x.d[1]
@@ -55,10 +56,6 @@ void signalHandler( int sigNo )
     signalRecieved = true;
   }
 }
-
-cudaError_t cudaPreImageNetMean(float4* input, size_t inputWidth, size_t inputHeight,
-				             float* output, size_t outputWidth, size_t outputHeight, 
-						   const float3& mean_value, cudaStream_t stream);
 
 Logger gLogger;
 
