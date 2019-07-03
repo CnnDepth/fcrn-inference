@@ -30,18 +30,21 @@
 #include "fp16.h"
 #include "slicePlugin.h"
 #include "interleavingPlugin.h"
+#include "argsParser.h"
 
 #define DIMS_C(x) x.d[0]
 #define DIMS_H(x) x.d[1]
 #define DIMS_W(x) x.d[2]
 
-const int   DEFAULT_CAMERA = 0;
-const int   MAX_BATCH_SIZE = 1;
-const char* MODEL_NAME     = "engine.trt";
-const char* INPUT_BLOB     = "tf/Placeholder";
-const char* OUTPUT_BLOB    = "tf/Reshape";
-const int IMG_WIDTH = 320;
-const int IMG_HEIGHT = 240;
+static samplesCommon::Args args;
+
+const int MAX_BATCH_SIZE = 1;
+int DEFAULT_CAMERA = 0;
+const char* MODEL_NAME = "";
+const char* INPUT_BLOB = "";
+const char* OUTPUT_BLOB = "";
+int IMG_WIDTH = 320;
+int IMG_HEIGHT = 240;
 
 bool signalRecieved = false;
 
@@ -77,7 +80,12 @@ void getColor(float x, float&b, float&g, float&r)
 
 int main( int argc, char** argv )
 {
- 
+  samplesCommon::parseArgs(args, argc, argv);
+  IMG_WIDTH = args.width;
+  IMG_HEIGHT = args.height;
+  MODEL_NAME = args.engineFile.c_str();
+  INPUT_BLOB = args.uffInputBlob.c_str();
+  OUTPUT_BLOB = args.outputBlob.c_str();
   if( signal(SIGINT, signalHandler) == SIG_ERR )
   { 
     std::cout << "\ncan't catch SIGINT" <<std::endl;
