@@ -27,7 +27,6 @@ template <typename T>
 cudaError_t cudaResizeNearestNeighbor( T* input, int nChannels, int inputHeight, int inputWidth,
                         T* output, cudaStream_t stream )
 {
-    std::cout << "cudaResizeNearestNeighbor" << std::endl;
     if( !input || !output )
     {
         std::cout << "No input or no output" << std::endl;

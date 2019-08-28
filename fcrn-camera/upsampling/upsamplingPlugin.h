@@ -101,7 +101,6 @@ public:
 
     const char* getPluginVersion() const override 
     { 
-        std::cout << "get version of " << this << std::endl;
         return "1";
     }
 
